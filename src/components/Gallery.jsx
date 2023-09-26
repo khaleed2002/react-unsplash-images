@@ -2,11 +2,10 @@ import { useEffect } from 'react'
 import { useGetImages } from '../reactQuery'
 
 const Gallery = ({ searchText }) => {
-  
-  const { isLoading, data, isError, error,refetch } = useGetImages(searchText)
-  useEffect(()=>{
+  const { isLoading, data, isError, error, refetch } = useGetImages(searchText)
+  useEffect(() => {
     refetch()
-  },[searchText])
+  }, [searchText])
   if (isLoading) {
     return (
       <section className="gallery-container">
@@ -21,14 +20,20 @@ const Gallery = ({ searchText }) => {
       </section>
     )
   }
-  console.log(data)
+  if (data.data.results.length < 1) {
+    return (
+      <section className="gallery-container">
+        <h3>There are no Results...</h3>
+      </section>
+    )
+  }
   return (
     <section className="gallery-container">
       <div className="gallery">
-        {data.data.results.map(({ urls,id }) => {
+        {data.data.results.map(({ urls, id }) => {
           return (
             <img
-            key={id}
+              key={id}
               src={urls.regular}
               alt={`${searchText} img`}
               className="gallery-image"
